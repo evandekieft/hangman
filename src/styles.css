@@ -22,10 +22,6 @@
   margin-top: 20px;
 }
 
-.gameHome button {
-  margin: 10px;
-}
-
 .hangmanio {
   font-family: bubblegums;
   text-transform: uppercase;
@@ -37,7 +33,7 @@
   src: url("BUBBLEGUMS.TTF");
 }
 
-.hangman-header h1 span {
+.homescreen-title h1 span {
   position: relative;
   top: 20px;
   display: inline-block;
@@ -53,25 +49,25 @@
   margin-bottom: 40px;
 }
 
-h1 span:nth-child(2) {
+.homescreen-title h1 span:nth-child(2) {
   animation-delay: 0.1s;
 }
-h1 span:nth-child(3) {
+.homescreen-title h1 span:nth-child(3) {
   animation-delay: 0.2s;
 }
-h1 span:nth-child(4) {
+.homescreen-title h1 span:nth-child(4) {
   animation-delay: 0.3s;
 }
-h1 span:nth-child(5) {
+.homescreen-title h1 span:nth-child(5) {
   animation-delay: 0.4s;
 }
-h1 span:nth-child(6) {
+.homescreen-title h1 span:nth-child(6) {
   animation-delay: 0.5s;
 }
-h1 span:nth-child(7) {
+.homescreen-title h1 span:nth-child(7) {
   animation-delay: 0.6s;
 }
-h1 span:nth-child(8) {
+.homescreen-title h1 span:nth-child(8) {
   animation-delay: 0.7s;
 }
 
@@ -82,4 +78,38 @@ h1 span:nth-child(8) {
       0 5px 0 #ccc, 0 6px 0 #ccc, 0 7px 0 #ccc, 0 8px 0 #ccc, 0 9px 0 #ccc,
       0 50px 25px rgba(0, 0, 0, 0.2);
   }
+}
+
+.homescreen button {
+  margin: 10px;
+  font-size: 35px;
+}
+
+.hints {
+  margin: 20px;
+}
+
+.shakeButton {
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+}
+
+.winStreak {
+  font-size: 30px;
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
 }
