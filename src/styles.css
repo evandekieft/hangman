@@ -95,8 +95,30 @@
   perspective: 1000px;
 }
 
-.winStreak {
+.winStreak-container {
+  position: relative;
+  background-image: url("starburst.jpg")
+}
+
+.winStreak-title {
+  position: absolute;
+  top: 120px;
+  right: 65px;
   font-size: 30px;
+}
+
+.winStreak-box {
+  position: absolute; 
+  top: 0px; 
+  right: 20px; 
+  width: 150px; 
+  height: 150px; 
+  font-size: 40px;
+  padding-top: 25px;
+  padding-right: 10px;
+  background-image: url("starburst.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 @keyframes shake {

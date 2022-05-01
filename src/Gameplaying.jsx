@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Tada from "react-reveal/Tada";
 import Header from "./Header";
+import useSound from "use-sound";
+import correctSfx from "../public/ding.m4a";
+import incorrectSfx from "../public/buzz.mp3";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -13,12 +16,25 @@ export default function GamePlaying({
   setGallowsIndex,
   winStreak
 }) {
-  function letterPressed(e) {
+  function onCorrectGuess(letter, playCorrect) {
+    playCorrect();
+  }
+
+  function onIncorrectGuess(letter, playIncorrect) {
+    setGallowsIndex(gallowsIndex + 1);
+    if (gallowsIndex + 1 < GALLOWS.length - 1) {
+      // not yet game over
+      playIncorrect();
+    }
+  }
+
+  function letterPressed(e, playCorrect, playIncorrect) {
     const letter = e.target.id.toUpperCase();
     setGuessed(guessed.concat(letter));
     if (!word.includes(letter)) {
-      // wrong guess
-      setGallowsIndex(gallowsIndex + 1);
+      onIncorrectGuess(letter, playIncorrect);
+    } else {
+      onCorrectGuess(letter, playCorrect);
     }
   }
 
@@ -38,6 +54,8 @@ export default function GamePlaying({
   }
 
   const [hint, setHint] = useState(null);
+  const [playIncorrect] = useSound(incorrectSfx);
+  const [playCorrect] = useSound(correctSfx);
   const guessesRemaining = GALLOWS.length - gallowsIndex - 1;
 
   const letters = word.map((c, index) => {
@@ -80,7 +98,9 @@ export default function GamePlaying({
         disabled={disabled}
         className={className + color + hintClass}
         key={c}
-        onClick={letterPressed}
+        onClick={(e) => {
+          letterPressed(e, playCorrect, playIncorrect);
+        }}
       >
         {c}
       </button>
@@ -90,13 +110,18 @@ export default function GamePlaying({
   return (
     <div className="App">
       <Header />
+      <div className="winStreak-container">
+        <div className="winStreak-box">
+          <p>{winStreak}</p>
+        </div>
+        <div className="winStreak-title">Wins</div>
+      </div>
+
       <div className="gallows">
         <img height="150px" src={GALLOWS[gallowsIndex]} alt="hangman" />
       </div>
       <div>{letters}</div>
       <div>{buttons}</div>
-      <div>Current winning streak: {winStreak}</div>
-      <div>Already guessed: {guessed}</div>
       <div>Number of guesses remaining: {guessesRemaining}</div>
       <div className="hints">
         <button
