@@ -89,6 +89,10 @@
   margin: 20px;
 }
 
+.hints button {
+  margin: 10px;
+}
+
 .shakeButton {
   animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
@@ -96,29 +100,31 @@
 }
 
 .winStreak-container {
-  position: relative;
+ /* position: relative;*/
   background-image: url("starburst.jpg")
 }
 
 .winStreak-title {
   position: absolute;
-  top: 120px;
-  right: 65px;
-  font-size: 30px;
+  top: 90px;
+  left: 45px;
+  font-size: 20px;
+  text-align:center;
 }
 
 .winStreak-box {
   position: absolute; 
-  top: 0px; 
-  right: 20px; 
-  width: 150px; 
-  height: 150px; 
-  font-size: 40px;
-  padding-top: 25px;
+  top: 15px; 
+  left: 20px; 
+  width: 100px; 
+  height: 100px; 
+  font-size: 20px;
+  padding-top: 23px;
   padding-right: 10px;
   background-image: url("starburst.jpg");
   background-size: contain;
   background-repeat: no-repeat;
+  text-align: center;
 }
 
 @keyframes shake {

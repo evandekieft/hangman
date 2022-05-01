@@ -3,7 +3,8 @@ import Tada from "react-reveal/Tada";
 import Header from "./Header";
 import useSound from "use-sound";
 import correctSfx from "../public/ding.m4a";
-import incorrectSfx from "../public/buzz.mp3";
+import incorrectSfx from "../public/buzz.m4a";
+import WinStreak from "./Winstreak";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -14,7 +15,10 @@ export default function GamePlaying({
   GALLOWS,
   gallowsIndex,
   setGallowsIndex,
-  winStreak
+  winStreak,
+  difficulty,
+  loadWordList,
+  resetState
 }) {
   function onCorrectGuess(letter, playCorrect) {
     playCorrect();
@@ -53,85 +57,93 @@ export default function GamePlaying({
     */
   }
 
+  function quitPressed(e) {
+    resetState();
+  }
+
   const [hint, setHint] = useState(null);
   const [playIncorrect] = useSound(incorrectSfx);
   const [playCorrect] = useSound(correctSfx);
   const guessesRemaining = GALLOWS.length - gallowsIndex - 1;
 
-  const letters = word.map((c, index) => {
-    if (guessed.includes(c)) {
-      return (
-        <span className="hangmanLetter" key={index}>
-          <Tada left>{c}</Tada>
-        </span>
-      );
-    } else {
-      return (
-        <span className="hangmanLetter" key={index}>
-          _
-        </span>
-      );
-    }
-  });
-
-  const buttons = ALPHABET.map((c) => {
-    const disabled = guessed.includes(c);
-    let color = "btn-primary";
-    if (guessed.includes(c)) {
-      if (word.includes(c)) {
-        color = "btn-success";
+  if (!word) {
+    loadWordList(difficulty);
+    return <div>Choosing word...</div>;
+  } else {
+    const letters = word.map((c, index) => {
+      if (guessed.includes(c)) {
+        return (
+          <span className="hangmanLetter" key={index}>
+            <Tada left>{c}</Tada>
+          </span>
+        );
       } else {
-        color = "btn-danger";
+        return (
+          <span className="hangmanLetter" key={index}>
+            _
+          </span>
+        );
       }
-    } else {
-      color = "btn-primary";
-    }
-    let hintClass = "";
-    if (hint === c) {
-      hintClass = " shakeButton";
-    }
-    const className = "letterButton btn btn-sm active ";
+    });
+
+    const buttons = ALPHABET.map((c) => {
+      const disabled = guessed.includes(c);
+      let color = "btn-primary";
+      if (guessed.includes(c)) {
+        if (word.includes(c)) {
+          color = "btn-success";
+        } else {
+          color = "btn-danger";
+        }
+      } else {
+        color = "btn-primary";
+      }
+      let hintClass = "";
+      if (hint === c) {
+        hintClass = " shakeButton";
+      }
+      const className = "letterButton btn btn-sm active ";
+
+      return (
+        <button
+          id={c}
+          disabled={disabled}
+          className={className + color + hintClass}
+          key={c}
+          onClick={(e) => {
+            letterPressed(e, playCorrect, playIncorrect);
+          }}
+        >
+          {c}
+        </button>
+      );
+    });
 
     return (
-      <button
-        id={c}
-        disabled={disabled}
-        className={className + color + hintClass}
-        key={c}
-        onClick={(e) => {
-          letterPressed(e, playCorrect, playIncorrect);
-        }}
-      >
-        {c}
-      </button>
-    );
-  });
-
-  return (
-    <div className="App">
-      <Header />
-      <div className="winStreak-container">
-        <div className="winStreak-box">
-          <p>{winStreak}</p>
+      <div className="App">
+        <Header />
+        <WinStreak winStreak={winStreak} />
+        <div className="gallows">
+          <img height="150px" src={GALLOWS[gallowsIndex]} alt="hangman" />
         </div>
-        <div className="winStreak-title">Wins</div>
+        <div>{letters}</div>
+        <div>{buttons}</div>
+        <div>Number of guesses remaining: {guessesRemaining}</div>
+        <div className="hints">
+          <button
+            disabled={hint}
+            onClick={hintPressed}
+            className="btn btn-sm btn-success"
+          >
+            Give hint
+          </button>
+          <div>
+            <button onClick={quitPressed} className="btn btn-sm btn-danger">
+              Quit
+            </button>
+          </div>
+        </div>
       </div>
-
-      <div className="gallows">
-        <img height="150px" src={GALLOWS[gallowsIndex]} alt="hangman" />
-      </div>
-      <div>{letters}</div>
-      <div>{buttons}</div>
-      <div>Number of guesses remaining: {guessesRemaining}</div>
-      <div className="hints">
-        <button
-          disabled={hint}
-          onClick={hintPressed}
-          className="btn btn-sm btn-success"
-        >
-          Give hint
-        </button>
-      </div>
-    </div>
-  );
+    );
+  }
 }

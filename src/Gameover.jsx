@@ -1,5 +1,6 @@
 import useSound from "use-sound";
 import failSfx from "../public/oof.mp3";
+import Header from "./Header";
 
 const FINAL_IMAGE = "IMG_0081.jpg";
 
@@ -8,6 +9,7 @@ export default function GameOver({ wordString, resetState, winStreak }) {
   play();
   return (
     <div className="App">
+      <Header />
       <div className="gallows">
         <img height="150px" src={FINAL_IMAGE} alt="hangman" />
       </div>
